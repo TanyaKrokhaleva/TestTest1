@@ -2,19 +2,20 @@ package lesson4;
 
 public class Main {
     public static void main(String[] args) {
-//        printThreeWords();
-//        checkSumSign();
-//        printColor();
-//        compareNumbers();
-//        System.out.println(five(5, 64));
-//        number(-9);
-//        System.out.println(fived(10));
-//        str("Строка", 5);
-//        System.out.println(getLeapYear(2134));
-//        replaceNumbers();
-//        setArray();
-//        setArray2();
+        printThreeWords();
+        checkSumSign();
+        printColor();
+        compareNumbers();
+        System.out.println(five(5, 64));
+        number(-9);
+        System.out.println(fived(10));
+        str("Строка", 5);
+        System.out.println(getLeapYear(2134));
+        replaceNumbers();
+        setArray();
+        setArray2();
         squareArray();
+        changedArray(10, "пыщь");
     }
 
     /**
@@ -158,7 +159,7 @@ public class Main {
      * Задание №11
      **/
     public static void setArray() {
-        System.out.println("\nЗадание №11");
+        System.out.println("\n\nЗадание №11");
         int[] array = new int[100];
         int number = 1;
         for(int i = 0; i < array.length; i++) {
@@ -173,7 +174,7 @@ public class Main {
      * Задание №12
      **/
     public static void setArray2() {
-        System.out.println("\nЗадание №11");
+        System.out.println("\n\nЗадание №12");
         int[] array = new int[] {1,5,3,2,11,4,5,2,4,8,9,1};
         System.out.print("Исходные числа:");
         for (int i : array) {
@@ -196,6 +197,7 @@ public class Main {
      * Задание №13
      **/
     public static void squareArray() {
+        System.out.println("\n\nЗадание №13");
         int[][] array = new int[11][11];
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array.length; j++) {
@@ -213,6 +215,19 @@ public class Main {
                 System.out.print(array[i][j] + " ");
             }
             System.out.println();
+        }
+    }
+    /**
+     * Задание №14
+     **/
+    public static void changedArray(int len, String initialValue) {
+        System.out.println("\nЗадание №14");
+        String[] array = new String[len];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = initialValue;
+        }
+        for (String i : array) {
+            System.out.print(i + " ");
         }
     }
 }
