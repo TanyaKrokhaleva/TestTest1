@@ -2,16 +2,19 @@ package lesson4;
 
 public class Main {
     public static void main(String[] args) {
-        printThreeWords();
-        checkSumSign();
-        printColor();
-        compareNumbers();
-        System.out.println(five(5, 64));
-        number(-9);
-        System.out.println(fived(10));
-        str("Строка", 5);
-        System.out.println(getLeapYear(2134));
-        replaceNumbers();
+//        printThreeWords();
+//        checkSumSign();
+//        printColor();
+//        compareNumbers();
+//        System.out.println(five(5, 64));
+//        number(-9);
+//        System.out.println(fived(10));
+//        str("Строка", 5);
+//        System.out.println(getLeapYear(2134));
+//        replaceNumbers();
+//        setArray();
+//        setArray2();
+        squareArray();
     }
 
     /**
@@ -150,7 +153,67 @@ public class Main {
         for (byte i : array) {
             System.out.print(" " + i);
         }
-
+    }
+    /**
+     * Задание №11
+     **/
+    public static void setArray() {
+        System.out.println("\nЗадание №11");
+        int[] array = new int[100];
+        int number = 1;
+        for(int i = 0; i < array.length; i++) {
+            array[i] = number;
+            number++;
+        }
+        for (int i : array) {
+            System.out.print(" " + i);
+        }
+    }
+    /**
+     * Задание №12
+     **/
+    public static void setArray2() {
+        System.out.println("\nЗадание №11");
+        int[] array = new int[] {1,5,3,2,11,4,5,2,4,8,9,1};
+        System.out.print("Исходные числа:");
+        for (int i : array) {
+            System.out.print(" " + i);
+        }
+        for(int i = 0; i < array.length; i++) {
+            if (array[i] < 6) {
+                int temp = array[i];
+                temp = array[i] * 2;
+                array[i] = temp;
+            }
+        }
+        System.out.println();
+        System.out.print("Новые числа:");
+        for (int i : array) {
+            System.out.print(" " + i);
+        }
+    }
+    /**
+     * Задание №13
+     **/
+    public static void squareArray() {
+        int[][] array = new int[11][11];
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length; j++) {
+                array[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < array.length; i++) {
+            array[i][i] = 1;
+        }
+        for (int i = 0; i < array.length; i++) {
+            array[i][array.length - 1 - i] = 1;
+        }
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                System.out.print(array[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
 
