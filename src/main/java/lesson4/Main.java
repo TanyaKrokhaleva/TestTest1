@@ -155,6 +155,7 @@ public class Main {
             System.out.print(" " + i);
         }
     }
+
     /**
      * Задание №11
      **/
@@ -162,7 +163,7 @@ public class Main {
         System.out.println("\n\nЗадание №11");
         int[] array = new int[100];
         int number = 1;
-        for(int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             array[i] = number;
             number++;
         }
@@ -170,17 +171,18 @@ public class Main {
             System.out.print(" " + i);
         }
     }
+
     /**
      * Задание №12
      **/
     public static void setArray2() {
         System.out.println("\n\nЗадание №12");
-        int[] array = new int[] {1,5,3,2,11,4,5,2,4,8,9,1};
+        int[] array = new int[]{1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
         System.out.print("Исходные числа:");
         for (int i : array) {
             System.out.print(" " + i);
         }
-        for(int i = 0; i < array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if (array[i] < 6) {
                 int temp = array[i];
                 temp = array[i] * 2;
@@ -193,6 +195,7 @@ public class Main {
             System.out.print(" " + i);
         }
     }
+
     /**
      * Задание №13
      **/
@@ -217,6 +220,7 @@ public class Main {
             System.out.println();
         }
     }
+
     /**
      * Задание №14
      **/
