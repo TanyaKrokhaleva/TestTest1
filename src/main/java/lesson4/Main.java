@@ -6,10 +6,10 @@ public class Main {
         checkSumSign();
         printColor();
         compareNumbers();
-        System.out.println(five(5, 64));
-        number(-9);
-        System.out.println(fived(10));
-        str("Строка", 5);
+        System.out.println(isSumInRange(5, 64));
+        checkNumber(-9);
+        System.out.println(isNegative(10));
+        printStringMultipleTimes("Строка", 5);
         System.out.println(getLeapYear(2134));
         replaceNumbers();
         setArray();
@@ -74,7 +74,7 @@ public class Main {
     /**
      * Задание №5
      **/
-    public static boolean five(int a, int b) {
+    public static boolean isSumInRange(int a, int b) {
         System.out.println("\nЗадание №5");
         int sum = a + b;
         if (sum >= 10 && sum <= 20) {
@@ -85,7 +85,7 @@ public class Main {
     /**
      * Задание №6
      **/
-    public static void number(int number) {
+    public static void checkNumber(int number) {
         System.out.println("\nЗадание №6");
         if (number >= 0) {
             System.out.println("Положительное число");
@@ -98,7 +98,7 @@ public class Main {
     /**
      * Задание №7
      **/
-    public static boolean fived(int number) {
+    public static boolean isNegative(int number) {
         System.out.println("\nЗадание №7");
         if (number < 0) {
             return true;
@@ -111,7 +111,7 @@ public class Main {
     /**
      * Задание №8
      **/
-    public static void str(String a, int num) {
+    public static void printStringMultipleTimes(String a, int num) {
         System.out.println("\nЗадание №8");
 
         for (int i = 0; i < num; i++) {
