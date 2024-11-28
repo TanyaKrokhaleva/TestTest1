@@ -1,5 +1,4 @@
-package lesson4;
-
+import lesson4.MethodsLesson4;
 
 public class Main {
     public static void main(String[] args) {
