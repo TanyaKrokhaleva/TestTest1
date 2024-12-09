@@ -1,4 +1,4 @@
-package lesson10;
+package lesson10.Animals;
 
 public class Dog extends Animal {
     public static int dogCount;
@@ -15,8 +15,7 @@ public class Dog extends Animal {
             System.out.println(getName() + " пробежал " + distance + " метров");
         }
 
-
-
+    @Override
     public void swim(int distance) {
         if (distance > 10) {
             System.out.println("Собаки не могут плыть более 10 метров");

@@ -1,4 +1,4 @@
-package lesson10;
+package lesson10.Animals;
 
 public class Animal {
 
@@ -20,5 +20,7 @@ public class Animal {
     public Animal(String name) {
         this.name = name;
         animalCount++;
+
+
     }
 }
