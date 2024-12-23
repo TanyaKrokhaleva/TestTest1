@@ -1,12 +1,19 @@
 import Lesson7.Factorial;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.provider.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class TestJunit5 {
 
-    @Test
-    void testFactorialOfZero() {
-        assertEquals(1, Factorial.factorial(0));
+    @ParameterizedTest
+    @DisplayName("Проверка нуля")
+    @ValueSource(ints = {0})
+    void testFactorialOfZero(int input) {
+        assertEquals(1, Factorial.factorial(input));
     }
 
     @Test
