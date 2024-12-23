@@ -1,30 +1,33 @@
 package Lesson7tests;
 
 import Lesson7.Factorial;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 public class FactorialTest {
-    @Test
-
-    public void testFactorialOfZero() {
-        Assert.assertEquals(Factorial.factorial(0), 1);
-    }
-    @Test
-    public void testFactorialOfPositiveNumber() {
-        Assert.assertEquals(Factorial.factorial(5), 120); // 5! = 120
+    @Test(dataProvider = "zeroDataProvider", dataProviderClass = DataProviders.class, description = "Проверка нуля")
+    public void testFactorialOfZero(int input) {
+        assertEquals(1, Factorial.factorial(input));
     }
 
-    @Test
-    public void testFactorialOfOne() {
-        Assert.assertEquals(Factorial.factorial(1), 1);
+    @Test(dataProvider = "positiveNumbersDataProvider", dataProviderClass = DataProviders.class, description = "Проверка положительных значений")
+    public void testFactorialOfPositiveNumbers(int input, long expected) {
+        assertEquals(expected, Factorial.factorial(input));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Факториал отрицательного числа не определен.")
-    public void testFactorialOfNegativeNumber() {
-        Factorial.factorial(-1);
+    @Test(dataProvider = "negativeNumbersDataProvider", dataProviderClass = DataProviders.class, description = "Проверка отрицательных значений", expectedExceptions = IllegalArgumentException.class)
+    public void testFactorialOfNegativeNumber(int input) {
+        Factorial.factorial(input);
+    }
+
+    @Test(dataProvider = "tooBigNumberDataProvider", dataProviderClass = DataProviders.class, description = "Проверка факториала с исходным числом больше допустимого", expectedExceptions = IllegalArgumentException.class)
+    public void testFactorialTooBig(int input) {
+        Factorial.factorial(input);
     }
 }
+
+
+
 
 
 
