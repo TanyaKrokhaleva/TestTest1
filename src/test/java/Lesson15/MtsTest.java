@@ -53,45 +53,11 @@ public class MtsTest {
         assertEquals("Онлайн пополнение\nбез комиссии", actualTitle);
     }
 
-    @DisplayName("Проверка наличия логотипов платежных систем: Visa")
-    @Test
-    public void visaLogoCheck() {
-        WebElement visaLogo = driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение ')]/..//img[@alt='Visa']"));
-        assertTrue(visaLogo.isDisplayed(), "Логотип Visa не отображается на странице");
-
-    }
-
-    @DisplayName("Проверка наличия логотипов платежных систем: Verified by Visa")
-    @Test
-    public void verifiedByVisaLogoCheck() {
-        WebElement visaLogo = driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение ')]/..//img[@alt='Verified By Visa']"));
-        assertTrue(visaLogo.isDisplayed(), "Логотип Verified by Visa не отображается на странице");
-
-    }
-
-    @DisplayName("Проверка наличия логотипов платежных систем: MasterCard")
-    @Test
-    public void MasterCardLogoCheck() {
-        WebElement masterCardLogo = driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение ')]/..//img[@alt='MasterCard']"));
-        assertTrue(masterCardLogo.isDisplayed(), "Логотип MasterCard не отображается на странице");
-
-    }
-
-    @DisplayName("Проверка наличия логотипов платежных систем: MasterCard Secure Code")
-    @Test
-    public void MasterCardSecureCodeLogoCheck() {
-        WebElement MasterCardSecureCodeLogo = driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение ')]/..//img[@alt='MasterCard Secure Code']"));
-        assertTrue(MasterCardSecureCodeLogo.isDisplayed(), "Логотип MasterCard Secure Code не отображается на странице");
-
-
-    }
-
-    @DisplayName("Проверка наличия логотипов платежных систем: Белкарт")
-    @Test
-    public void belCardLogoCheck() {
-        WebElement belCardLogo = driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение ')]/..//img[@alt='Белкарт']"));
-        assertTrue(belCardLogo.isDisplayed(), "Логотип Белкарт не отображается на странице");
-
+    @DisplayName("Проверка отображения логотипов платежных систем")
+    @ParameterizedTest
+    @ValueSource(strings = {"Visa", "Verified By Visa", "MasterCard", "MasterCard Secure Code", "Белкарт"})
+    public void checkPaymentLogos(String cardName) {
+        assertTrue(driver.findElement(By.xpath("//h2[contains(text(), 'Онлайн пополнение')]/..//img[@alt='" + cardName + "']")).isDisplayed(),  "Логотип " + cardName + " не отображается на странице");
     }
 
     @DisplayName("Проверка работы ссылки Подробнее о сервисе")
