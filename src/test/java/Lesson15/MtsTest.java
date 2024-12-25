@@ -30,7 +30,6 @@ public class MtsTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://www.mts.by/");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         By cookieAccept = By.xpath("//h3[contains(text(), 'Обработка файлов cookie')]/../../..//button[text() = 'Принять']");
 
         if(driver.findElement(cookieAccept).isDisplayed()) {
@@ -107,6 +106,8 @@ public class MtsTest {
         String newUrl = driver.getCurrentUrl();
         assertNotEquals(newUrl, currentUrl, "Адрес страницы не изменился после нажатия на ссылку");
         assertEquals(newUrl, "https://www.mts.by/help/poryadok-oplaty-i-bezopasnost-internet-platezhey/");
+        driver.navigate().back();
+        wait.until(ExpectedConditions.titleContains("МТС – мобильный оператор в Беларуси"));
     }
     @DisplayName("Проверка корректного заполнения поля суммы и кнопки \"Продолжить\"")
     @ParameterizedTest
