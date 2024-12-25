@@ -5,18 +5,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,26 +74,30 @@ public class MtsTest {
     }
     @DisplayName("Проверка корректного заполнения поля суммы и кнопки \"Продолжить\"")
     @ParameterizedTest
-    @ValueSource(strings = {"50"})
-    public void checkFillingFieldCorrectSum(String sum) throws AWTException {
+    @CsvSource({"0.1, 0.10", "1, 1.00", "499, 499.00", "499.99, 499.99", "-10, 10.00"})
+    public void checkFillingSum(String sum, String displayedSum) {
         driver.findElement(By.xpath("//input[@id = 'connection-phone']")).sendKeys("297777777");
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).sendKeys(sum);
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).sendKeys("qwwwww@dfgfg.ru");
         driver.findElement(By.xpath("//form[@id = 'pay-connection']//button[text() = 'Продолжить']")).click();
-        Robot robot = new Robot();
-        robot.mouseMove(100, 100);
-        robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
-        Actions actions = new Actions(driver);
-        actions.keyDown(Keys.ESCAPE).perform();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("iframe.bepaid-iframe")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("iframe.bepaid-iframe")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(), 'BYN')]")));
+        assertEquals(displayedSum + " BYN", driver.findElement(By.xpath("//span[contains(text(), 'BYN')]")).getText());
+        assertEquals("Оплатить " + displayedSum + " BYN", driver.findElement(By.xpath("//button[contains(text(), 'Оплатить')]")).getText());
+        driver.findElement(By.xpath("//svg-icon[@class = 'header__close-icon']")).click();
+        driver.switchTo().defaultContent();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id = 'connection-phone']")));
         driver.findElement(By.xpath("//input[@id = 'connection-phone']")).clear();
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).clear();
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).clear();
+
     }
-    @DisplayName("Проверка некорректного заполнения поля суммы")
+    @DisplayName("Проверка заполнения поля суммы нулём")
     @ParameterizedTest
     @ValueSource(strings = {"0"})
-    public void checkFillingFieldIncorrectSum(String sum) {
+    public void checkFillingNullSum(String sum) {
         driver.findElement(By.xpath("//input[@id = 'connection-phone']")).sendKeys("297777777");
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).sendKeys(sum);
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).sendKeys("qwwwww@dfgfg.ru");
@@ -106,15 +107,42 @@ public class MtsTest {
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).clear();
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).clear();
     }
+    @DisplayName("Проверка заполнения поля суммы нулём")
+    @Test
+    public void checkFillingEmptySum() {
+        String isInputRequired = driver.findElement(By.xpath("//input[@id = 'connection-sum']")).getDomAttribute("required");
+        assertEquals("true", isInputRequired);
+    }
+
     @DisplayName("Проверка некорректного заполнения email")
     @ParameterizedTest
     @ValueSource(strings = {"000"})
-    public void checkFillingFieldEmail(String email) {
+    public void checkFillingIncorrectEmail(String email) {
         driver.findElement(By.xpath("//input[@id = 'connection-phone']")).sendKeys("297777777");
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).sendKeys("28.57");
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).sendKeys(email);
         driver.findElement(By.xpath("//form[@id = 'pay-connection']//button[text() = 'Продолжить']")).click();
         assertTrue(driver.findElement(By.xpath("//p[text() = 'Введите корректный адрес электронной почты.']")).isDisplayed());
+        driver.findElement(By.xpath("//input[@id = 'connection-phone']")).clear();
+        driver.findElement(By.xpath("//input[@id = 'connection-sum']")).clear();
+        driver.findElement(By.xpath("//input[@id = 'connection-email']")).clear();
+    }
+
+    @DisplayName("Проверка оставления поля email пустым")
+    @Test
+    public void checkFillingEmptyEmail() {
+        driver.findElement(By.xpath("//input[@id = 'connection-phone']")).sendKeys("297777777");
+        driver.findElement(By.xpath("//input[@id = 'connection-sum']")).sendKeys("28.57");
+        driver.findElement(By.xpath("//form[@id = 'pay-connection']//button[text() = 'Продолжить']")).click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("iframe.bepaid-iframe")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("iframe.bepaid-iframe")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(), 'BYN')]")));
+        assertEquals("28.57 BYN", driver.findElement(By.xpath("//span[contains(text(), 'BYN')]")).getText());
+        assertEquals("Оплатить 28.57 BYN", driver.findElement(By.xpath("//button[contains(text(), 'Оплатить')]")).getText());
+        driver.findElement(By.xpath("//svg-icon[@class = 'header__close-icon']")).click();
+        driver.switchTo().defaultContent();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id = 'connection-phone']")));
         driver.findElement(By.xpath("//input[@id = 'connection-phone']")).clear();
         driver.findElement(By.xpath("//input[@id = 'connection-sum']")).clear();
         driver.findElement(By.xpath("//input[@id = 'connection-email']")).clear();
