@@ -10,6 +10,8 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class RestTest {
+
+
     @Test
     public void testGetRequest() {
         RestAssured.baseURI = "https://postman-echo.com";
@@ -93,8 +95,27 @@ public class RestTest {
                 .and()
                 .body("data", equalTo(requestBody));
     }
-}
 
+    @Test
+    public void testPostMethod() {
+        // Данные формы для отправки
+        String foo1 = "bar1";
+        String foo2 = "bar2";
+
+        given()
+                .contentType(ContentType.URLENC)
+                .formParam("foo1", foo1)
+                .formParam("foo2", foo2)
+                .when()
+                .post("https://postman-echo.com/post")
+                .then()
+                .assertThat().statusCode(200)
+                .and()
+                .body("form.foo1", equalTo(foo1))
+                .and()
+                .body("form.foo2", equalTo(foo2));
+    }
+}
 
 
 
