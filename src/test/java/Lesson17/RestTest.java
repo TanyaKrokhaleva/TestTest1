@@ -1,25 +1,29 @@
 package Lesson17;
 
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.hamcrest.Matchers.containsString;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class RestTest {
 
+    private final String baseURI = "https://postman-echo.com";
+    private final String body = "This is expected to be sent back as part of response body";
 
-    @Test
-    public void testGetRequest() {
-        RestAssured.baseURI = "https://postman-echo.com";
-
+    @DisplayName("GET Request")
+    @ParameterizedTest
+    @CsvSource({"foo1, bar1, foo2, bar2"})
+    public void testGetRequest(String param1, String value1, String param2, String value2) {
         given()
                 .log().all()
-                .param("foo1", "bar1")
-                .param("foo2", "bar2")
+                .baseUri(baseURI)
+                .param(param1, value1)
+                .param(param2, value2)
                 .when()
                 .get("/get")
                 .then()
@@ -27,94 +31,104 @@ public class RestTest {
                 .assertThat()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("args.foo1", equalTo("bar1"))
-                .body("args.foo2", equalTo("bar2"));
+                .body("args." + param1, equalTo(value1))
+                .body("args." + param2, equalTo(value2));
     }
 
-    @Test
-    public void postRawText() {
-        String baseUrl = "https://postman-echo.com";
-        String requestBody = "{\n\"test\": \"value\"\n}";
-
+    @DisplayName("POST Raw Text")
+    @ParameterizedTest
+    @ValueSource(strings = {"{\"test\": \"value\"\n}"})
+    public void postRawText(String text) {
         Response response = given()
-                .baseUri(baseUrl)
+                .log().all()
+                .baseUri(baseURI)
                 .contentType(ContentType.TEXT)
-                .body(requestBody)
+                .body(text)
                 .when()
                 .post("/post");
-
-        response.then().assertThat()
+        response
+                .then()
+                .log().all()
+                .assertThat()
                 .statusCode(200)
                 .and()
-                .body("data", containsString("\"test\": \"value\""));
-
-        System.out.println(response.asString());
+                .body("data", containsString(text));
     }
 
-    @Test
-    public void putRequest() {
-        String requestBody = "This is expected to be sent back as part of response body.";
-
+    @DisplayName("POST Form Data")
+    @ParameterizedTest
+    @CsvSource({"foo1, bar1, foo2, bar2"})
+    public void testPostMethod(String param1, String value1, String param2, String value2) {
         given()
+                .log().all()
+                .baseUri(baseURI)
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam(param1, value1)
+                .formParam(param2, value2)
+                .when()
+                .post("/post")
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("form." + param1, equalTo(value1))
+                .body("form." + param2, equalTo(value2));
+    }
+
+    @DisplayName("PUT Request")
+    @ParameterizedTest
+    @ValueSource(strings = {body})
+    public void putRequest(String text) {
+        given()
+                .log().all()
+                .baseUri(baseURI)
                 .contentType(ContentType.TEXT)
-                .body(requestBody)
+                .body(text)
                 .when()
-                .put("https://postman-echo.com/put")
+                .put("/put")
                 .then()
+                .log().all()
                 .assertThat().statusCode(200)
                 .and()
-                .body("data", equalTo(requestBody));
+                .body("data", equalTo(text));
     }
 
-    @Test
-    public void patchRequest() {
-        String requestBody = "This is expected to be sent back as part of response body.";
-
+    @DisplayName("PATCH Request")
+    @ParameterizedTest
+    @ValueSource(strings = {body})
+    public void patchRequest(String text) {
         given()
+                .log().all()
+                .baseUri(baseURI)
                 .contentType(ContentType.TEXT)
-                .body(requestBody)
+                .body(text)
                 .when()
-                .patch("https://postman-echo.com/patch")
+                .patch("/patch")
                 .then()
+                .log().all()
                 .assertThat().statusCode(200)
                 .and()
-                .body("data", equalTo(requestBody));
+                .body("data", equalTo(text));
     }
 
-    @Test
-    public void deleteRequest() {
-        String requestBody = "This is expected to be sent back as part of response body.";
-
+    @DisplayName("DELETE Request")
+    @ParameterizedTest
+    @ValueSource(strings = {body})
+    public void deleteRequest(String text) {
         given()
+                .log().all()
+                .baseUri(baseURI)
                 .contentType(ContentType.TEXT)
-                .body(requestBody)
+                .body(text)
                 .when()
-                .delete("https://postman-echo.com/delete")
+                .delete("/delete")
                 .then()
+                .log().all()
                 .assertThat().statusCode(200)
                 .and()
-                .body("data", equalTo(requestBody));
+                .body("data", equalTo(text));
     }
 
-    @Test
-    public void testPostMethod() {
-        // Данные формы для отправки
-        String foo1 = "bar1";
-        String foo2 = "bar2";
-
-        given()
-                .contentType(ContentType.URLENC)
-                .formParam("foo1", foo1)
-                .formParam("foo2", foo2)
-                .when()
-                .post("https://postman-echo.com/post")
-                .then()
-                .assertThat().statusCode(200)
-                .and()
-                .body("form.foo1", equalTo(foo1))
-                .and()
-                .body("form.foo2", equalTo(foo2));
-    }
 }
 
 
